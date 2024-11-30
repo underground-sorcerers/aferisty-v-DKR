@@ -6,7 +6,8 @@ Where?
 - e-commerce
 - cybersecurity
 
-Traditional ML focuses on individual transactions, but many cases of fraud involve more complex relationships between transactions, users, or entities. So, yeah, Graph Neural Networks (GNNs).
+Why?
+ - Traditional ML focuses on individual transactions, but many cases of fraud involve more complex relationships between transactions, users, or entities. So, yeah, Graph Neural Networks (GNNs).
 
 We are going to explore how to detect fraud in online banking using **GraphSAGE**, including:
 - fitting a big dataset in memory
@@ -28,18 +29,18 @@ Graphs let us capture these relationships. By using GNNs (like GraphSAGE), we ca
 
 ## Dataset
 
-The dataset (https://www.kaggle.com/datasets/ealtman2019/credit-card-transactions/data) contains **unobfuscated** credit card transactions.
+The dataset (https://www.kaggle.com/datasets/ealtman2019/credit-card-transactions/data) contains **unobfuscated** credit card transactions. See `preprocessing.py` and `fit_in_memory_experiments.ipynb` to know how we fit the part of the dataset in a small amount of memory to speed up the computations and bring out the most relevant parts and balances. The result is in `dataset_files/preprocessed_transactions.csv`.
 
 ---
 
-## Preprocessing: From Transactions to Graphs
+## Preprocessing: Correct & Clean
 
 ### 1: Data Cleaning
 
 We started by cleaning the data:
 - Missing values are filled with the column means (though you might want to drop them out in some cases).
-- Categorical columns (e.g., `Merchant Name`) are label-encoded into numerical values (however, depending on your situation, we could also suggest dropping those out or handling them in other way).
-- Numerical features (e.g., `Amount`) are normalized.
+- Categorical columns (e.g. `Merchant Name`) are label-encoded into numerical values (however, depending on your situation, we could also suggest dropping those out or handling them in other way).
+- Numerical features (e.g. `Amount`) are normalized.
 
 ```python
 scaler = StandardScaler()
@@ -52,7 +53,7 @@ for col in categorical_columns:
 
 ### 2: Balancing the Dataset
 
-Fraudulent transactions are typically rare. To balance the dataset, we undersampled the genuine class (`is_fraud=0`) to match the size of the fraudulent class.
+Fraudulent transactions are typically rare. To balance the dataset, we undersampled the genuine class (`Is Fraud?=0`) to match the size of the fraudulent class, but your possible alternative might be enforcing higher loss policy for missing the minority.
 
 ---
 
@@ -142,8 +143,8 @@ print(f"Recall: {recall:.4f}")
 
 ### Results
 
-- **Precision**: 0.81
-- **Recall**: 0.80
+- **Precision**: 0.8492
+- **Recall**: 0.8470
 
 ### Confusion Matrix
 
